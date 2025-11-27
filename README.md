@@ -886,4 +886,4 @@ For issues and questions, please open a GitHub issue.
 
 ---
 
-**Built with ❤️ using NestJS, TypeScript, PostgreSQL, and Redis**
+**Built with ❤️ by Nagmani using NestJS, TypeScript, PostgreSQL, and Redis**
