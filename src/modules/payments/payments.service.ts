@@ -63,22 +63,33 @@ export class PaymentsService {
 
     const query = this.paymentRepository.createQueryBuilder('payment');
 
+    // Build WHERE conditions
+    const conditions: string[] = [];
+    const params: any = {};
+
     if (userSchoolId) {
-      query.where('payment.school_id = :schoolId', { schoolId: userSchoolId });
+      conditions.push('payment.school_id = :schoolId');
+      params.schoolId = userSchoolId;
     }
 
     if (filters?.student_id) {
-      query.andWhere('payment.student_id = :studentId', {
-        studentId: filters.student_id,
-      });
+      conditions.push('payment.student_id = :studentId');
+      params.studentId = filters.student_id;
     }
 
     if (filters?.status) {
-      query.andWhere('payment.status = :status', { status: filters.status });
+      conditions.push('payment.status = :status');
+      params.status = filters.status;
     }
 
     if (filters?.method) {
-      query.andWhere('payment.method = :method', { method: filters.method });
+      conditions.push('payment.method = :method');
+      params.method = filters.method;
+    }
+
+    // Apply WHERE conditions
+    if (conditions.length > 0) {
+      query.where(conditions.join(' AND '), params);
     }
 
     const [data, total] = await query
@@ -87,6 +98,7 @@ export class PaymentsService {
       .skip(skip)
       .take(limit)
       .orderBy('payment.completed_at', 'DESC')
+      .addOrderBy('payment.created_at', 'DESC')
       .getManyAndCount();
 
     return {

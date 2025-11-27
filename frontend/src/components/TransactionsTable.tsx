@@ -49,10 +49,19 @@ export function TransactionsTable({
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    if (page !== 1) {
+      setPage(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusFilter, methodFilter]);
+
   useEffect(() => {
     loadPayments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sortField, sortDirection, statusFilter, methodFilter]);
+
 
   const loadPayments = async () => {
     try {
@@ -65,6 +74,11 @@ export function TransactionsTable({
         method: methodFilter || undefined,
       };
 
+      // Debug: Log filters being sent
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Loading payments with filters:', filters);
+      }
+
       const response: PaymentListResponse = await apiService.getPayments(filters);
       setPayments(response.data);
       setTotalPages(response.totalPages);
@@ -74,7 +88,7 @@ export function TransactionsTable({
       if (error.response?.status !== 401 && error.code !== 'ERR_NETWORK') {
         toast.error('Failed to load transactions');
       }
-      console.error(error);
+      console.error('Error loading payments:', error);
     } finally {
       setLoading(false);
     }
@@ -185,8 +199,11 @@ export function TransactionsTable({
         </div>
         <select
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+          onChange={(e) => {
+            setStatusFilter(e.target.value);
+            setPage(1); // Reset to first page when filter changes
+          }}
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-white"
         >
           <option value="">All Status</option>
           <option value="success">Success</option>
@@ -196,8 +213,11 @@ export function TransactionsTable({
         </select>
         <select
           value={methodFilter}
-          onChange={(e) => setMethodFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+          onChange={(e) => {
+            setMethodFilter(e.target.value);
+            setPage(1); // Reset to first page when filter changes
+          }}
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-white"
         >
           <option value="">All Methods</option>
           <option value="upi">UPI</option>

@@ -35,12 +35,17 @@ export class PaymentsController {
   @Get()
   @RequirePermission(Resource.PAYMENTS, Action.READ)
   findAll(
-    @Query() pagination: PaginationDto,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
     @Query('student_id') studentId?: string,
     @Query('status') status?: string,
     @Query('method') method?: string,
     @CurrentUser() user?: any,
   ) {
+    const pagination: PaginationDto = {
+      page: page ? parseInt(page, 10) : 1,
+      limit: limit ? parseInt(limit, 10) : 20,
+    };
     return this.paymentsService.findAll(
       pagination,
       user?.school_id,
