@@ -1,0 +1,613 @@
+{
+  "info": {
+    "name": "Reporting Engine API",
+    "description": "Complete API collection for Reporting Engine - Fee Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "reporting-engine-api",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('access_token', jsonData.access_token);",
+                  "    pm.collectionVariables.set('refresh_token', jsonData.refresh_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@platform.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "refresh"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Students",
+      "item": [
+        {
+          "name": "Create Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"school_id\": \"<school_id>\",\n  \"student_number\": \"STU001\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"class\": \"10\",\n  \"section\": \"A\",\n  \"email\": \"john.doe@example.com\",\n  \"phone\": \"+919876543210\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/students",
+              "host": ["{{base_url}}"],
+              "path": ["students"]
+            }
+          }
+        },
+        {
+          "name": "Get All Students",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/students?page=1&limit=20&class=10&is_active=true",
+              "host": ["{{base_url}}"],
+              "path": ["students"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "class",
+                  "value": "10"
+                },
+                {
+                  "key": "is_active",
+                  "value": "true"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Student by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/students/:id",
+              "host": ["{{base_url}}"],
+              "path": ["students", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<student_id>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Student",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Jane\",\n  \"class\": \"11\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/students/:id",
+              "host": ["{{base_url}}"],
+              "path": ["students", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<student_id>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Student",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/students/:id",
+              "host": ["{{base_url}}"],
+              "path": ["students", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<student_id>"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fee Bills",
+      "item": [
+        {
+          "name": "Create Fee Bill",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"school_id\": \"<school_id>\",\n  \"student_id\": \"<student_id>\",\n  \"amount_due\": 25000,\n  \"due_date\": \"2025-02-01\",\n  \"period\": \"2025-02\",\n  \"status\": \"due\",\n  \"meta\": {\n    \"tuition\": 15000,\n    \"transport\": 5000,\n    \"library\": 3000,\n    \"sports\": 2000\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/fee-bills",
+              "host": ["{{base_url}}"],
+              "path": ["fee-bills"]
+            }
+          }
+        },
+        {
+          "name": "Get All Fee Bills",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fee-bills?page=1&limit=20&student_id=<student_id>&status=due",
+              "host": ["{{base_url}}"],
+              "path": ["fee-bills"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "student_id",
+                  "value": "<student_id>"
+                },
+                {
+                  "key": "status",
+                  "value": "due"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Fee Bill by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fee-bills/:id",
+              "host": ["{{base_url}}"],
+              "path": ["fee-bills", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<fee_bill_id>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Fee Bill",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"paid\",\n  \"amount_due\": 25000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/fee-bills/:id",
+              "host": ["{{base_url}}"],
+              "path": ["fee-bills", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<fee_bill_id>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Fee Bill",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fee-bills/:id",
+              "host": ["{{base_url}}"],
+              "path": ["fee-bills", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<fee_bill_id>"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fee_bill_id\": \"<fee_bill_id>\",\n  \"school_id\": \"<school_id>\",\n  \"student_id\": \"<student_id>\",\n  \"amount_paid\": 25000,\n  \"method\": \"upi\",\n  \"payment_provider\": \"Razorpay\",\n  \"provider_txn_id\": \"TXN123456789\",\n  \"status\": \"success\",\n  \"metadata\": {\n    \"gateway_response\": \"Success\",\n    \"fees\": 500\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments",
+              "host": ["{{base_url}}"],
+              "path": ["payments"]
+            }
+          }
+        },
+        {
+          "name": "Get All Payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payments?page=1&limit=20&student_id=<student_id>&status=success&method=upi",
+              "host": ["{{base_url}}"],
+              "path": ["payments"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "student_id",
+                  "value": "<student_id>"
+                },
+                {
+                  "key": "status",
+                  "value": "success"
+                },
+                {
+                  "key": "method",
+                  "value": "upi"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Payment by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["payments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<payment_id>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Payment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"success\",\n  \"completed_at\": \"2025-01-15T10:30:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["payments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<payment_id>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Payment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["payments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "<payment_id>"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Get Summary Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/summary?school_id=<school_id>&from=2025-01-01&to=2025-01-31&method=upi&period_months=1",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "summary"],
+              "query": [
+                {
+                  "key": "school_id",
+                  "value": "<school_id>",
+                  "description": "Optional: Filter by school"
+                },
+                {
+                  "key": "student_id",
+                  "value": "",
+                  "description": "Optional: Filter by student"
+                },
+                {
+                  "key": "from",
+                  "value": "2025-01-01",
+                  "description": "Optional: Start date (ISO format)"
+                },
+                {
+                  "key": "to",
+                  "value": "2025-01-31",
+                  "description": "Optional: End date (ISO format)"
+                },
+                {
+                  "key": "method",
+                  "value": "upi",
+                  "description": "Optional: Payment method filter"
+                },
+                {
+                  "key": "period_months",
+                  "value": "1",
+                  "description": "Optional: Number of months to look back (if from/to not provided)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Time Series Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/time-series?school_id=<school_id>&from=2025-01-01&to=2025-01-31&interval=day&method=upi",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "time-series"],
+              "query": [
+                {
+                  "key": "school_id",
+                  "value": "<school_id>"
+                },
+                {
+                  "key": "from",
+                  "value": "2025-01-01"
+                },
+                {
+                  "key": "to",
+                  "value": "2025-01-31"
+                },
+                {
+                  "key": "interval",
+                  "value": "day",
+                  "description": "Options: day, week, month"
+                },
+                {
+                  "key": "method",
+                  "value": "upi"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Student Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/student/:studentId",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "student", ":studentId"],
+              "variable": [
+                {
+                  "key": "studentId",
+                  "value": "<student_id>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Top Schools",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/top-schools?limit=10&period_months=1",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "top-schools"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of top schools to return"
+                },
+                {
+                  "key": "period_months",
+                  "value": "1",
+                  "description": "Period in months to analyze"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
