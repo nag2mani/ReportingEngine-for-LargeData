@@ -4,31 +4,26 @@
 
 ### Start Backend
 ```bash
-cd /Users/nagmani/nag2mani/dev/sarthak
 ./scripts/backend-control.sh start
 ```
 
 ### Stop Backend
 ```bash
-cd /Users/nagmani/nag2mani/dev/sarthak
 ./scripts/backend-control.sh stop
 ```
 
 ### Restart Backend
 ```bash
-cd /Users/nagmani/nag2mani/dev/sarthak
 ./scripts/backend-control.sh restart
 ```
 
 ### Check Status
 ```bash
-cd /Users/nagmani/nag2mani/dev/sarthak
 ./scripts/backend-control.sh status
 ```
 
 ### View Logs
 ```bash
-cd /Users/nagmani/nag2mani/dev/sarthak
 ./scripts/backend-control.sh logs
 # Or
 tail -f /tmp/backend.log
@@ -38,7 +33,6 @@ tail -f /tmp/backend.log
 
 ### Start (Development Mode)
 ```bash
-cd /Users/nagmani/nag2mani/dev/sarthak
 NODE_ENV=development npm run start:dev
 ```
 
