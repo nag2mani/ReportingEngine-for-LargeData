@@ -7,7 +7,6 @@ Quick reference for controlling the frontend development server.
 ### Stop Frontend
 
 ```bash
-cd /Users/nagmani/nag2mani/dev/sarthak
 ./scripts/frontend-control.sh stop
 ```
 
