@@ -28,7 +28,7 @@ Complete guide for developing, running, and extending the Reporting Engine appli
 
 ```bash
 # 1. Clone and navigate to project
-cd /Users/nagmani/nag2mani/dev/sarthak
+cd ReportingEngine-for-LargeData
 
 # 2. Install backend dependencies
 npm install
@@ -84,7 +84,7 @@ npm run dev
 
 ```bash
 # Start (Development Mode)
-cd /Users/nagmani/nag2mani/dev/sarthak
+cd ReportingEngine-for-LargeData
 NODE_ENV=development npm run start:dev
 
 # Start (Production Mode)
