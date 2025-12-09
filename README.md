@@ -874,21 +874,6 @@ docker-compose logs -f app
 docker-compose restart app
 ```
 
-## License
-
-MIT
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## Support
-
-For issues and questions, please open a GitHub issue.
-
 ---
 
 **Built with ❤️ by Nagmani using NestJS, TypeScript, PostgreSQL, and Redis**
