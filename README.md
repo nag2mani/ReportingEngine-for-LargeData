@@ -2,6 +2,11 @@
 
 A scalable, production-ready reporting engine for fee management systems designed to handle millions of records with complex joins, multi-tenant isolation, and fine-grained authorization.
 
+![1](https://github.com/user-attachments/assets/152316f8-d1ab-4525-a042-bbd483e70c88)
+
+![2](https://github.com/user-attachments/assets/ffd8947d-98ab-47bd-bb54-2161c9e985fa)
+
+
 ## Table of Contents
 
 - [Overview](#overview)
