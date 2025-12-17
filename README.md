@@ -72,11 +72,7 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
   - API development
   - Troubleshooting
 
-- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Quick command reference card
-
-- **[BACKEND_CONTROL.md](BACKEND_CONTROL.md)** - Backend control commands
-
-- **[Frontend](frontend/README.md)** - Frontend-specific documentation
+- **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** - Complete development guide (includes quick reference)
 
 ## Overview
 

@@ -19,16 +19,75 @@ Complete guide for developing, running, and extending the Reporting Engine appli
 
 ## Quick Start
 
+Get the Reporting Engine up and running in 5 minutes!
+
 ### Prerequisites
-- Node.js 18+
-- Docker & Docker Compose
+- Docker & Docker Compose installed
+- Node.js 18+ (optional, for local development)
 - npm or yarn
 
-### Initial Setup
+### Option 1: Docker Compose Setup (Recommended for Quick Start)
+
+```bash
+# 1. Clone and setup
+git clone <repo-url>
+cd ReportingEngine-for-LargeData
+cp .env.example .env
+
+# 2. Start all services (PostgreSQL, Redis, and Application)
+docker-compose up -d
+
+# This starts:
+# - PostgreSQL (port 5432)
+# - Redis (port 6379)
+# - Application (port 3000)
+
+# 3. Initialize Database
+# Option A: Using Docker
+docker-compose exec app npm run typeorm:migration:run
+
+# Option B: Locally (if you have Node.js installed)
+npm install
+npm run typeorm:migration:run
+
+# Note: In development mode, TypeORM synchronize: true will auto-create tables.
+# For production, use migrations.
+
+# 4. Seed Database
+# Small scale (recommended for first run)
+docker-compose exec app npm run seed -- --scale=small
+
+# Or locally
+npm run seed -- --scale=small
+
+# This creates:
+# - 5 schools
+# - 500 students (100 per school)
+# - Fee bills and payments
+# - Default users
+
+# 5. Test the API
+# Health check
+curl http://localhost:3000/api/v1/health
+
+# Login
+curl -X POST http://localhost:3000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@platform.com","password":"password123"}'
+
+# 6. Import Postman Collection
+# 1. Open Postman
+# 2. Import → File → Select postman_collection.json
+# 3. Run "Authentication → Login" to get tokens
+# 4. Test all endpoints!
+```
+
+### Option 2: Local Development Setup
 
 ```bash
 # 1. Clone and navigate to project
 cd ReportingEngine-for-LargeData
+cp .env.example .env
 
 # 2. Install backend dependencies
 npm install
@@ -55,9 +114,59 @@ cd frontend
 npm run dev
 ```
 
+### Development Mode (Local without Docker for App)
+
+To run the application locally while using Docker only for PostgreSQL and Redis:
+
+```bash
+# Start PostgreSQL and Redis with Docker
+docker-compose up -d postgres redis
+
+# Run app locally
+npm install
+npm run start:dev
+```
+
+### Next Steps
+
+After getting the application running:
+
+- Read the full [README.md](README.md) for detailed documentation
+- Explore the API endpoints in Postman
+- Check out the architecture and design decisions
+- Review deployment guides for production setup
+- See the [Running & Stopping Services](#running--stopping-services) section for daily development workflow
+
 ---
 
 ## Running & Stopping Services
+
+### 🚀 Start Everything (Quick)
+
+```bash
+# 1. Start database
+docker-compose up -d postgres redis
+
+# 2. Start backend
+./scripts/backend-control.sh start
+
+# 3. Start frontend (new terminal)
+cd frontend && npm run dev
+```
+
+### 🛑 Stop Everything (Quick)
+
+```bash
+# Stop backend
+./scripts/backend-control.sh stop
+
+# Stop frontend
+./scripts/frontend-control.sh stop
+# OR Press Ctrl+C in frontend terminal
+
+# Stop database
+docker-compose stop postgres redis
+```
 
 ### Backend Control
 
@@ -161,9 +270,32 @@ docker-compose stop
 pkill -f "vite"
 ```
 
+### 🔍 Check Status
+
+```bash
+# Backend health
+curl http://localhost:3000/api/v1/health
+
+# Frontend
+curl http://localhost:5173
+
+# Database
+docker-compose ps
+```
+
 ---
 
 ## Adding More Data
+
+### 📊 Seeding Database (Quick Reference)
+
+```bash
+# Seed database (small scale)
+npm run seed -- --scale=small
+
+# Seed database (custom)
+npm run seed -- --schools=10 --students=500
+```
 
 ### Seeding Database
 
@@ -755,11 +887,17 @@ export function Layout({ children }: LayoutProps) {
 npm run typeorm:migration:generate -- -n MigrationName
 
 # Run migrations
+# Option A: Using Docker
+docker-compose exec app npm run typeorm:migration:run
+
+# Option B: Locally
 npm run typeorm:migration:run
 
 # Revert last migration
 npm run typeorm:migration:revert
 ```
+
+**Note**: In development mode, TypeORM `synchronize: true` will auto-create tables. For production, use migrations.
 
 ### Database Queries
 
@@ -815,10 +953,11 @@ curl -X POST http://localhost:3000/api/v1/payments \
 
 #### Using Postman
 
-1. Import `postman_collection.json`
-2. Run "Authentication → Login" to get token
-3. Token is automatically saved to collection variable
-4. Test other endpoints
+1. Open Postman
+2. Import → File → Select `postman_collection.json`
+3. Run "Authentication → Login" to get token
+4. Token is automatically saved to collection variable
+5. Test all endpoints!
 
 ### API Response Format
 
@@ -925,7 +1064,82 @@ function MyForm() {
 
 ---
 
+## Default Credentials
+
+After seeding the database, you can use these credentials:
+
+### Platform Admin
+- **Email**: `admin@platform.com`
+- **Password**: `password123`
+- **Role**: Platform Administrator with full access
+
+### School Admins
+
+The seed script creates school admin users for the first 10 schools. Here are the credentials:
+
+1. `admin@schoole05f6593.com` / `password123` (School 1)
+2. `admin@school386b52db.com` / `password123` (School 2)
+3. `admin@schooldf216246.com` / `password123` (School 3)
+4. `admin@schooled2e84fa.com` / `password123` (School 4)
+5. `admin@schoola47b789e.com` / `password123` (School 5)
+6. `admin@school96f60369.com` / `password123` (School 6)
+7. `admin@school0ea536c7.com` / `password123` (School 7)
+8. `admin@school4eec2c24.com` / `password123` (School 8)
+9. `admin@school5da29965.com` / `password123` (School 9)
+10. `admin@schoolfb852efc.com` / `password123` (School 10)
+
+### Accountants
+
+The seed script creates accountant users for the first 10 schools. Here are the credentials:
+
+1. `accountant@schoole05f6593.com` / `password123` (School 1)
+2. `accountant@school386b52db.com` / `password123` (School 2)
+3. `accountant@schooldf216246.com` / `password123` (School 3)
+4. `accountant@schooled2e84fa.com` / `password123` (School 4)
+5. `accountant@schoola47b789e.com` / `password123` (School 5)
+6. `accountant@school96f60369.com` / `password123` (School 6)
+7. `accountant@school0ea536c7.com` / `password123` (School 7)
+8. `accountant@school4eec2c24.com` / `password123` (School 8)
+9. `accountant@school5da29965.com` / `password123` (School 9)
+10. `accountant@schoolfb852efc.com` / `password123` (School 10)
+
+### Getting All User Credentials
+
+To list all available user credentials (including all schools and users), run:
+
+```bash
+npm run list-users
+```
+
+This command will display:
+- Platform admin credentials
+- All school admin credentials (grouped by school)
+- All accountant credentials (grouped by school)
+- A summary table with all users
+- Total counts of users and schools
+
+**Note**: The email format uses the first 8 characters of each school's UUID. If you seed the database with different options or re-seed, the school IDs will be different, so use `npm run list-users` to get the current credentials.
+
+## URLs
+
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:3000/api/v1
+- **Health Check**: http://localhost:3000/api/v1/health
+
 ## Troubleshooting
+
+### 🐛 Quick Troubleshooting Commands
+
+```bash
+# Kill process on port
+lsof -ti:3000 | xargs kill -9
+lsof -ti:5173 | xargs kill -9
+
+# Clear and reinstall
+rm -rf node_modules dist
+npm install
+cd frontend && rm -rf node_modules && npm install
+```
 
 ### Backend Issues
 
@@ -957,6 +1171,36 @@ docker-compose exec postgres psql -U postgres -d reporting_engine -c "SELECT 1;"
 
 # Restart database
 docker-compose restart postgres
+
+# Wait for PostgreSQL to be ready
+docker-compose logs postgres
+
+# Check if services are running
+docker-compose ps
+```
+
+#### Port already in use (Docker)
+
+If ports are already in use, you can change them in `docker-compose.yml`:
+
+```yaml
+ports:
+  - "5433:5432"  # PostgreSQL (change from 5432)
+  - "6380:6379"  # Redis (change from 6379)
+  - "3001:3000"  # App (change from 3000)
+```
+
+#### Need to reset everything (Docker)
+
+```bash
+# Remove all containers and volumes (⚠️ deletes all data)
+docker-compose down -v
+
+# Start fresh
+docker-compose up -d
+
+# Re-seed database
+npm run seed -- --scale=small
 ```
 
 #### CORS errors
@@ -1111,28 +1355,49 @@ reporting-engine/
 
 ## Quick Command Reference
 
+### Backend
 ```bash
-# Backend
-./scripts/backend-control.sh start|stop|restart|status|logs
-npm run start:dev              # Development mode
-npm run build                  # Build for production
-npm run seed -- --scale=small  # Seed database
+./scripts/backend-control.sh start      # Start
+./scripts/backend-control.sh stop       # Stop
+./scripts/backend-control.sh restart    # Restart
+./scripts/backend-control.sh status     # Check status
+./scripts/backend-control.sh logs      # View logs
+npm run start:dev                       # Development mode
+npm run build                           # Build for production
+npm run seed -- --scale=small           # Seed database
+npm run list-users                      # List all user credentials
+```
 
-# Frontend
+### Frontend
+```bash
+./scripts/frontend-control.sh stop      # Stop
+./scripts/frontend-control.sh status    # Check status
 cd frontend
-npm run dev                    # Development server
-npm run build                  # Production build
-npm run preview                # Preview production build
+npm run dev                             # Development server
+npm run build                           # Production build
+npm run preview                         # Preview production build
+```
 
-# Database
-docker-compose up -d postgres redis    # Start
-docker-compose stop postgres redis     # Stop
-docker-compose logs -f postgres        # View logs
+### Database
+```bash
+docker-compose ps                       # Check status
+docker-compose logs -f postgres         # View logs
+docker-compose exec postgres psql -U postgres -d reporting_engine  # Connect
+docker-compose up -d postgres redis     # Start
+docker-compose stop postgres redis       # Stop
+```
 
-# All Services
+### All Services
+```bash
+# Start everything
 docker-compose up -d postgres redis && \
 ./scripts/backend-control.sh start && \
 cd frontend && npm run dev
+
+# Stop everything
+./scripts/backend-control.sh stop && \
+docker-compose stop postgres redis && \
+pkill -f "vite"
 ```
 
 ---
@@ -1143,3 +1408,7 @@ For more details, see:
 - [README.md](README.md) - Main documentation
 - [BACKEND_CONTROL.md](BACKEND_CONTROL.md) - Backend control guide
 - [frontend/README.md](frontend/README.md) - Frontend documentation
+
+---
+
+**Note**: This guide now includes all content from QUICK_REFERENCE.md for a single comprehensive documentation file.
