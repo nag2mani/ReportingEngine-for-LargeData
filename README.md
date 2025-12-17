@@ -48,7 +48,7 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
 - [Architecture](#architecture)
-- [Database Schema](Database-Schema)
+- [Database Schema](#database-schema)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Design Decisions](#design-decisions)
