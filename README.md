@@ -63,7 +63,7 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
 
 ## Documentation
 
-- **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** - Complete developer guide covering:
+- **[Documentation](DEVELOPER_GUIDE.md)** - Complete developer guide covering:
   - Running & stopping services
   - Adding more data
   - Modifying existing services
