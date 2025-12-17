@@ -1309,50 +1309,6 @@ npm run typeorm:migration:run
 
 ---
 
-## Project Structure Reference
-
-```
-reporting-engine/
-├── src/                          # Backend source
-│   ├── entities/                # Database entities
-│   ├── modules/                 # Feature modules
-│   │   ├── auth/
-│   │   ├── students/
-│   │   ├── fees/
-│   │   ├── payments/
-│   │   └── reports/
-│   ├── common/                  # Shared code
-│   │   ├── guards/
-│   │   ├── interceptors/
-│   │   └── decorators/
-│   └── config/                  # Configuration
-├── frontend/                     # Frontend source
-│   ├── src/
-│   │   ├── components/          # Reusable components
-│   │   ├── pages/               # Page components
-│   │   ├── services/            # API services
-│   │   ├── context/             # React context
-│   │   ├── types/               # TypeScript types
-│   │   └── utils/               # Utility functions
-├── scripts/                      # Utility scripts
-│   ├── seed.ts                  # Database seeding
-│   └── backend-control.sh       # Backend control
-├── k8s/                          # Kubernetes manifests
-├── docker-compose.yml            # Docker services
-└── README.md                     # Main documentation
-```
-
----
-
-## Additional Resources
-
-- [NestJS Documentation](https://docs.nestjs.com/)
-- [React Documentation](https://react.dev/)
-- [TypeORM Documentation](https://typeorm.io/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-
----
-
 ## Quick Command Reference
 
 ### Backend
@@ -1399,16 +1355,3 @@ cd frontend && npm run dev
 docker-compose stop postgres redis && \
 pkill -f "vite"
 ```
-
----
-
-**Last Updated**: 2025-11-27
-
-For more details, see:
-- [README.md](README.md) - Main documentation
-- [BACKEND_CONTROL.md](BACKEND_CONTROL.md) - Backend control guide
-- [frontend/README.md](frontend/README.md) - Frontend documentation
-
----
-
-**Note**: This guide now includes all content from QUICK_REFERENCE.md for a single comprehensive documentation file.
