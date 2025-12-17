@@ -260,14 +260,68 @@ The database schema includes:
 
 ## Technology Stack
 
-- **Backend**: NestJS (TypeScript)
+### Backend
+- **Framework**: NestJS 10.3.0 (TypeScript 5.3.3)
+- **Runtime**: Node.js
+- **HTTP Server**: Express (via @nestjs/platform-express)
 - **Database**: PostgreSQL 15
-- **ORM**: TypeORM
-- **Cache**: Redis
-- **Authentication**: JWT (access + refresh tokens)
-- **Validation**: class-validator, class-transformer
+- **ORM**: TypeORM 0.3.17
+- **Cache**: Redis 7 (via cache-manager-redis-yet)
+- **Authentication**: 
+  - JWT (access + refresh tokens) via @nestjs/jwt
+  - Passport.js (passport-jwt strategy)
+  - bcrypt for password hashing
+- **Validation**: 
+  - class-validator
+  - class-transformer
+- **Rate Limiting**: @nestjs/throttler
+- **Caching**: @nestjs/cache-manager
+- **Configuration**: @nestjs/config
+- **Reactive Programming**: RxJS
+- **Utilities**: uuid
 - **Containerization**: Docker, Docker Compose
 - **Orchestration**: Kubernetes (EKS)
+
+### Frontend
+- **Framework**: React 18.2.0
+- **Language**: TypeScript 5.2.2
+- **Build Tool**: Vite 5.0.8
+- **Routing**: React Router v6.21.0
+- **HTTP Client**: Axios 1.6.2
+- **Styling**: 
+  - Tailwind CSS 3.3.6
+  - PostCSS 8.4.32
+  - Autoprefixer 10.4.16
+- **Icons**: Lucide React 0.309.0
+- **Notifications**: React Hot Toast 2.4.1
+- **Date Utilities**: date-fns 3.0.6
+- **State Management**: React Context API
+- **UI Components**: Custom components with Tailwind CSS
+
+### Development Tools
+- **Linting**: 
+  - ESLint 8.x
+  - @typescript-eslint/eslint-plugin
+  - eslint-config-prettier
+  - eslint-plugin-prettier
+- **Code Formatting**: Prettier 3.1.1
+- **Testing**: 
+  - Jest 29.7.0 (backend)
+  - ts-jest
+  - supertest
+- **Type Checking**: TypeScript
+- **Package Management**: npm
+- **Version Control**: Git
+
+### Infrastructure & DevOps
+- **Containerization**: 
+  - Docker
+  - Docker Compose
+- **Orchestration**: Kubernetes (EKS)
+- **Database**: PostgreSQL 15 (Alpine)
+- **Cache**: Redis 7 (Alpine)
+- **CI/CD**: (Configurable - GitHub Actions, GitLab CI, etc.)
+- **Cloud Platform**: AWS (EKS, Aurora, ElastiCache, etc.)
 
 ## Design Decisions
 
