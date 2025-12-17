@@ -25,6 +25,7 @@ A scalable, production-ready reporting engine for fee management systems designe
 - [Overview](#overview)
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
+- [Project Structure](#project-structure)
 - [Architecture](#architecture)
 - [Database Schema](#database-schema)
 - [Features](#features)
@@ -87,6 +88,91 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
   - API development
   - Troubleshooting
 
+
+## Project Structure
+
+```
+ReportingEngine-for-LargeData/
+├── src/                          # Backend source code
+│   ├── entities/                 # TypeORM database entities
+│   │   ├── audit-log.entity.ts
+│   │   ├── fee-bill.entity.ts
+│   │   ├── field-permission.entity.ts
+│   │   ├── payment.entity.ts
+│   │   ├── permission.entity.ts
+│   │   ├── role.entity.ts
+│   │   ├── school.entity.ts
+│   │   ├── student.entity.ts
+│   │   ├── transaction-status.entity.ts
+│   │   └── user.entity.ts
+│   ├── modules/                  # Feature modules
+│   │   ├── auth/                 # Authentication module
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.module.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── dto/
+│   │   │   └── strategies/
+│   │   ├── students/             # Student CRUD operations
+│   │   ├── fees/                 # Fee bill management
+│   │   ├── payments/             # Payment processing
+│   │   ├── reports/              # Reporting endpoints
+│   │   └── health/               # Health check endpoint
+│   ├── common/                   # Shared code
+│   │   ├── guards/               # Auth & permission guards
+│   │   ├── interceptors/         # Field masking, audit logging
+│   │   ├── decorators/           # Custom decorators
+│   │   └── dto/                  # Shared DTOs
+│   ├── config/                   # Configuration modules
+│   ├── app.module.ts             # Root module
+│   └── main.ts                   # Application entry point
+├── frontend/                     # Frontend React application
+│   ├── src/
+│   │   ├── components/           # Reusable React components
+│   │   │   ├── Layout.tsx
+│   │   │   ├── ProtectedRoute.tsx
+│   │   │   └── TransactionsTable.tsx
+│   │   ├── pages/                # Page components
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── Login.tsx
+│   │   │   ├── Transactions.tsx
+│   │   │   └── TransactionDetail.tsx
+│   │   ├── services/             # API service layer
+│   │   │   └── api.ts
+│   │   ├── context/              # React context providers
+│   │   │   └── AuthContext.tsx
+│   │   ├── types/                # TypeScript type definitions
+│   │   │   └── index.ts
+│   │   ├── utils/                # Utility functions
+│   │   │   ├── format.ts
+│   │   │   └── permissions.ts
+│   │   ├── App.tsx               # Main app component
+│   │   ├── main.tsx              # Frontend entry point
+│   │   └── index.css             # Global styles
+│   ├── public/                   # Static assets
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── tailwind.config.js
+│   └── vite.config.ts
+├── scripts/                      # Utility scripts
+│   ├── seed.ts                   # Database seeding script
+│   ├── backend-control.sh        # Backend service control
+│   ├── frontend-control.sh       # Frontend service control
+│   └── list-users.ts             # User listing utility
+├── k8s/                          # Kubernetes deployment manifests
+│   ├── namespace.yaml
+│   ├── configmap.yaml
+│   ├── secret.yaml
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── hpa.yaml                  # Horizontal Pod Autoscaler
+│   └── ingress.yaml
+├── docker-compose.yml            # Local development services
+├── Dockerfile                    # Production Docker image
+├── postman_collection.json       # API testing collection
+├── DATABASE_SCHEMA.md            # Database schema documentation
+├── DEVELOPER_GUIDE.md            # Developer guide
+└── README.md                     # This file
+```
 
 ## Architecture
 
@@ -592,36 +678,6 @@ curl -X POST http://localhost:3000/api/v1/auth/login \
 # Get summary (replace TOKEN)
 curl http://localhost:3000/api/v1/reports/summary \
   -H "Authorization: Bearer <TOKEN>"
-```
-
-## Project Structure
-
-```
-reporting-engine/
-├── src/
-│   ├── entities/          # TypeORM entities
-│   ├── modules/           # Feature modules
-│   │   ├── auth/         # Authentication
-│   │   ├── students/     # Student CRUD
-│   │   ├── fees/         # Fee bill CRUD
-│   │   ├── payments/     # Payment CRUD
-│   │   ├── reports/      # Reporting endpoints
-│   │   └── health/       # Health check
-│   ├── common/           # Shared code
-│   │   ├── guards/       # Auth & permission guards
-│   │   ├── interceptors/ # Field masking, audit logging
-│   │   ├── decorators/   # Custom decorators
-│   │   └── dto/          # Shared DTOs
-│   ├── config/           # Configuration
-│   ├── app.module.ts     # Root module
-│   └── main.ts           # Entry point
-├── scripts/
-│   └── seed.ts           # Database seeding script
-├── k8s/                  # Kubernetes manifests
-├── docker-compose.yml    # Local development
-├── Dockerfile            # Production image
-├── postman_collection.json
-└── README.md
 ```
 
 ## Assumptions & Guesstimates
