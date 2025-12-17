@@ -65,29 +65,6 @@ async function listUsers() {
       }
     }
 
-    // Also display a summary table
-    console.log('\n\n=== SUMMARY TABLE ===\n');
-    console.log('School Name'.padEnd(20) + ' | ' + 'Role'.padEnd(15) + ' | ' + 'Email'.padEnd(40) + ' | Password');
-    console.log('-'.repeat(100));
-    
-    for (const school of schools) {
-      const users = usersBySchool.get(school.id) || [];
-      if (users.length > 0) {
-        for (const user of users) {
-          const roleName = user.role?.name || roleMap.get(user.role_id) || 'Unknown';
-          console.log(
-            school.name.padEnd(20) + ' | ' +
-            roleName.padEnd(15) + ' | ' +
-            user.email.padEnd(40) + ' | password123'
-          );
-        }
-      }
-    }
-
-    console.log(`\n\nTotal school users: ${schoolUsers.length}`);
-    console.log(`Total schools with users: ${usersBySchool.size}`);
-    console.log(`Total schools: ${schools.length}`);
-
   } catch (error) {
     console.error('Error listing users:', error);
     throw error;

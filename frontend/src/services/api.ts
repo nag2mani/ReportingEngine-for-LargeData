@@ -7,6 +7,7 @@ import type {
   SummaryReport,
   TimeSeriesData,
   FilterOptions,
+  PlatformStats,
 } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
@@ -129,6 +130,11 @@ class ApiService {
 
   async getStudentReport(studentId: string) {
     const response = await this.client.get(`/reports/student/${studentId}`);
+    return response.data;
+  }
+
+  async getPlatformStats(): Promise<PlatformStats> {
+    const response = await this.client.get<PlatformStats>('/reports/platform-stats');
     return response.data;
   }
 }

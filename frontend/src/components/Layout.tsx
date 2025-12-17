@@ -35,9 +35,13 @@ export function Layout({ children }: LayoutProps) {
 
             <div className="flex items-center gap-4">
               <div className="hidden sm:block text-sm text-gray-600">
-                <span className="font-medium">{user?.name}</span>
-                <span className="mx-2">•</span>
-                <span className="text-gray-500">{user?.role.replace('_', ' ')}</span>
+                <span className="font-medium">{user?.name || 'User'}</span>
+                {user?.role && (
+                  <>
+                    <span className="mx-2">•</span>
+                    <span className="text-gray-500">{user.role.replace('_', ' ')}</span>
+                  </>
+                )}
               </div>
 
               <button
@@ -62,8 +66,10 @@ export function Layout({ children }: LayoutProps) {
             <div className="sm:hidden py-4 border-t border-gray-200">
               <div className="px-4 space-y-2">
                 <div className="text-sm text-gray-600">
-                  <div className="font-medium">{user?.name}</div>
-                  <div className="text-gray-500">{user?.role.replace('_', ' ')}</div>
+                  <div className="font-medium">{user?.name || 'User'}</div>
+                  {user?.role && (
+                    <div className="text-gray-500">{user.role.replace('_', ' ')}</div>
+                  )}
                 </div>
               </div>
             </div>

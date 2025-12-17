@@ -5,6 +5,7 @@ import {
   Param,
   UseGuards,
   UseInterceptors,
+  ForbiddenException,
 } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { ReportFilterDto, TimeSeriesFilterDto } from './dto/report-filter.dto';
@@ -58,5 +59,17 @@ export class ReportsController {
       limit ? parseInt(limit.toString(), 10) : 10,
       periodMonths ? parseInt(periodMonths.toString(), 10) : 1,
     );
+  }
+
+  @Get('platform-stats')
+  @RequirePermission(Resource.REPORTS, Action.READ)
+  async getPlatformStats(@CurrentUser() user: any) {
+    // Only platform admins can access this endpoint
+    // Platform admins have school_id === null OR role.name === 'platform_admin'
+    const isPlatformAdmin = user.school_id === null || user.role?.name === 'platform_admin';
+    if (!isPlatformAdmin) {
+      throw new ForbiddenException('Access denied: Platform admin only');
+    }
+    return this.reportsService.getPlatformStats();
   }
 }

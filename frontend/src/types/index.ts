@@ -100,3 +100,12 @@ export interface FilterOptions {
   page?: number;
   limit?: number;
 }
+
+export interface PlatformStats {
+  total_schools: number;
+  total_students: number;
+  active_students: number;
+  total_fee_bills: number;
+  total_payments: number;
+  total_revenue: number;
+}

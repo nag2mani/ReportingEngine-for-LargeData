@@ -280,6 +280,52 @@ export class ReportsService {
     }));
   }
 
+  async getPlatformStats() {
+    const cacheKey = 'platform:stats';
+    const cached = await this.cacheManager.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    // Count total schools
+    const totalSchools = await this.schoolRepository.count();
+
+    // Count total students
+    const totalStudents = await this.studentRepository.count();
+
+    // Count active students
+    const activeStudents = await this.studentRepository.count({
+      where: { is_active: true },
+    });
+
+    // Count total fee bills
+    const totalFeeBills = await this.feeBillRepository.count();
+
+    // Count total payments
+    const totalPayments = await this.paymentRepository.count();
+
+    // Calculate total revenue (sum of successful payments)
+    const revenueResult = await this.paymentRepository
+      .createQueryBuilder('p')
+      .select('COALESCE(SUM(p.amount_paid), 0)', 'total_revenue')
+      .where('p.status = :status', { status: PaymentStatus.SUCCESS })
+      .getRawOne();
+    const totalRevenue = parseFloat(revenueResult?.total_revenue || '0');
+
+    const result = {
+      total_schools: totalSchools,
+      total_students: totalStudents,
+      active_students: activeStudents,
+      total_fee_bills: totalFeeBills,
+      total_payments: totalPayments,
+      total_revenue: totalRevenue,
+    };
+
+    // Cache for 5 minutes
+    await this.cacheManager.set(cacheKey, result, 300000);
+    return result;
+  }
+
   private async getMethodBreakdown(
     fromDate: Date,
     toDate: Date,
