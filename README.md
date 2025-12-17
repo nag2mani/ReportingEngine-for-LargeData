@@ -740,4 +740,4 @@ docker-compose restart app
 
 ---
 
-**Built with ❤️ by Nagmani using NestJS, TypeScript, PostgreSQL, and Redis**
+**Built with ❤️ by Nagmani & CursorAI Using NestJS, TypeScript, PostgreSQL, and Redis**
