@@ -16,7 +16,12 @@ A scalable, production-ready reporting engine for fee management systems designe
 * **Fine-grained authorization :-**
   Access control is implemented at a detailed level, allowing permissions to be defined per role, feature, or data scope (e.g., view-only access, department-level data access, or restricted financial visibility).
 
-![1](https://github.com/user-attachments/assets/152316f8-d1ab-4525-a042-bbd483e70c88)
+### Platform Admin Dashboard
+<img width="1359" height="619" alt="Screenshot 2025-12-17 at 10 38 11 PM" src="https://github.com/user-attachments/assets/0faff57e-5ef3-43cb-a37d-5afbfd2c9d03" />
+
+### School Admin Dashboard
+<img width="1333" height="713" alt="Screenshot 2025-12-17 at 10 38 45 PM" src="https://github.com/user-attachments/assets/96c5289b-d009-45a7-8970-f0731027150b" />
+
 
 ## Table of Contents
 
