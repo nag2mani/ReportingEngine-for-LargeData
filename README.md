@@ -20,6 +20,43 @@ A scalable, production-ready reporting engine for fee management systems designe
 
 ![2](https://github.com/user-attachments/assets/ffd8947d-98ab-47bd-bb54-2161c9e985fa)
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Architecture](#architecture)
+- [Database Schema](#database-schema)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Design Decisions](#design-decisions)
+- [Installation & Setup](#installation--setup)
+- [Frontend](#frontend)
+- [API Documentation](#api-documentation)
+- [Authorization System](#authorization-system)
+- [Scalability Strategies](#scalability-strategies)
+- [AWS Production Deployment](#aws-production-deployment)
+- [Docker & Kubernetes](#docker--kubernetes)
+- [Testing](#testing)
+
+
+## Overview
+
+This reporting engine is designed for a platform supporting **1000 schools** with:
+- **2,000,000+ students** (2000 per school average)
+- **Millions of fee bills and transactions**
+- **Real-time dashboard reporting** with filtering capabilities
+- **Multi-tenant isolation** by school
+- **Action-level and field-level authorization**
+
+### Key Capabilities
+
+1. **Dashboard Reporting**: Summary reports on total fees due, collected, outstanding with filtering by time, student, and payment method
+2. **Scalable Architecture**: Handles millions of records with optimized queries, caching, and partitioning strategies
+3. **Authorization**: RBAC with action-level and field-level permissions
+4. **Multi-tenant**: Secure data isolation by school
+5. **Real-time Analytics**: Cached reports with Redis for fast dashboard loads
+
 ## Quick Start
 
 ```bash
@@ -42,25 +79,6 @@ cd frontend && npm run dev
 Open http://localhost:5173 and login with `admin@platform.com` / `password123`
 
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [Architecture](#architecture)
-- [Database Schema](#database-schema)
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Design Decisions](#design-decisions)
-- [Installation & Setup](#installation--setup)
-- [Frontend](#frontend)
-- [API Documentation](#api-documentation)
-- [Authorization System](#authorization-system)
-- [Scalability Strategies](#scalability-strategies)
-- [AWS Production Deployment](#aws-production-deployment)
-- [Docker & Kubernetes](#docker--kubernetes)
-- [Testing](#testing)
-
 ## Documentation
 
 - **[Documentation](DEVELOPER_GUIDE.md)** - Complete developer guide covering:
@@ -72,22 +90,6 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
   - API development
   - Troubleshooting
 
-## Overview
-
-This reporting engine is designed for a platform supporting **1000 schools** with:
-- **2,000,000+ students** (2000 per school average)
-- **Millions of fee bills and transactions**
-- **Real-time dashboard reporting** with filtering capabilities
-- **Multi-tenant isolation** by school
-- **Action-level and field-level authorization**
-
-### Key Capabilities
-
-1. **Dashboard Reporting**: Summary reports on total fees due, collected, outstanding with filtering by time, student, and payment method
-2. **Scalable Architecture**: Handles millions of records with optimized queries, caching, and partitioning strategies
-3. **Authorization**: RBAC with action-level and field-level permissions
-4. **Multi-tenant**: Secure data isolation by school
-5. **Real-time Analytics**: Cached reports with Redis for fast dashboard loads
 
 ## Architecture
 
