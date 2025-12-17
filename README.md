@@ -5,7 +5,7 @@ A scalable, production-ready reporting engine for fee management systems designe
 ### Key Capabilities Explained
 
 * **Handles millions of records :-**
-  The reporting engine is optimized to work efficiently with very large datasets (millions of rows) without performance degradation, ensuring fast query execution even as data grows over time.
+  Reporting engine is optimized to work efficiently with very large datasets (millions of rows) without performance degradation, ensuring fast query execution even as data grows over time.
 
 * **Supports complex joins :-**
   It can generate reports by combining data from multiple related tables (such as students, fees, payments, classes, and academic years) using advanced SQL joins, filters, and aggregations.
@@ -48,7 +48,7 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
 - [Architecture](#architecture)
-- [Database Schema](#database-schema)
+- [Database Schema](DATABASE_SCHEMA.md)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Design Decisions](#design-decisions)
@@ -128,98 +128,14 @@ This reporting engine is designed for a platform supporting **1000 schools** wit
 
 ## Database Schema
 
-### Core Tables
+For detailed database schema documentation, see **[DATABASE_SCHEMA.md](DATABASE_SCHEMA.md)**.
 
-#### `schools`
-- `id` (uuid, PK)
-- `name` (varchar)
-- `timezone` (varchar)
-- `region` (varchar)
-- `created_at` (timestamptz)
+The database schema includes:
 
-#### `students`
-- `id` (uuid, PK)
-- `school_id` (uuid, FK)
-- `student_number` (varchar, unique per school)
-- `first_name`, `last_name` (varchar)
-- `class`, `section` (varchar)
-- `admission_date` (date)
-- `email`, `phone` (varchar)
-- `is_active` (boolean)
-- `meta` (jsonb)
-- **Indexes**: `(school_id, student_number)`, `(school_id, class)`
-
-#### `fee_bills`
-- `id` (uuid, PK)
-- `school_id` (uuid, FK)
-- `student_id` (uuid, FK)
-- `amount_due` (numeric(12,2))
-- `due_date` (date)
-- `period` (varchar)
-- `status` (enum: due, partial, paid, overdue)
-- `meta` (jsonb)
-- **Indexes**: `(school_id, due_date)`, `(student_id)`, `(status)`
-
-#### `payments`
-- `id` (uuid, PK)
-- `fee_bill_id` (uuid, FK, nullable)
-- `school_id` (uuid, FK)
-- `student_id` (uuid, FK)
-- `amount_paid` (numeric(12,2))
-- `method` (enum: cash, card, upi, netbanking, cheque, wallet)
-- `payment_provider` (varchar)
-- `provider_txn_id` (varchar, unique)
-- `status` (enum: initiated, success, failed, reversed)
-- `initiated_at`, `completed_at` (timestamptz)
-- `metadata` (jsonb)
-- **Indexes**: `(school_id, completed_at)`, `(provider_txn_id)`, `(fee_bill_id)`, `(status)`
-
-#### `transaction_status`
-- `id` (uuid, PK)
-- `payment_id` (uuid, FK)
-- `status` (varchar)
-- `changed_at` (timestamptz)
-- `notes` (text)
-
-### Authorization Tables
-
-#### `users`
-- `id` (uuid, PK)
-- `email` (varchar, unique)
-- `hashed_password` (varchar)
-- `name` (varchar)
-- `school_id` (uuid, FK, nullable - null for platform admins)
-- `role_id` (uuid, FK)
-- `is_active` (boolean)
-
-#### `roles`
-- `id` (uuid, PK)
-- `name` (varchar, unique)
-- `description` (text)
-
-#### `permissions`
-- `id` (uuid, PK)
-- `role_id` (uuid, FK)
-- `resource` (enum: students, fee_bills, payments, reports, schools, users)
-- `action` (enum: read, create, update, delete)
-
-#### `field_permissions`
-- `id` (uuid, PK)
-- `role_id` (uuid, FK)
-- `resource` (enum)
-- `field_name` (varchar)
-- `allowed_actions` (jsonb array)
-
-#### `audit_logs`
-- `id` (uuid, PK)
-- `user_id` (uuid, FK)
-- `resource` (varchar)
-- `resource_id` (uuid)
-- `action` (varchar)
-- `changes` (jsonb)
-- `ip_address` (varchar)
-- `user_agent` (text)
-- `created_at` (timestamptz)
+- **Core Tables**: `schools`, `students`, `fee_bills`, `payments`, `transaction_status`
+- **Authorization Tables**: `users`, `roles`, `permissions`, `field_permissions`, `audit_logs`
+- **Indexing Strategy**: Composite and single-column indexes for optimal query performance
+- **Multi-Tenancy**: Row-level isolation using `school_id` for secure data separation
 
 ## Features
 
