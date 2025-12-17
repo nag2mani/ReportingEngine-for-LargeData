@@ -20,26 +20,6 @@ A scalable, production-ready reporting engine for fee management systems designe
 
 ![2](https://github.com/user-attachments/assets/ffd8947d-98ab-47bd-bb54-2161c9e985fa)
 
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [Architecture](#architecture)
-- [Database Schema](#database-schema)
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Design Decisions](#design-decisions)
-- [Installation & Setup](#installation--setup)
-- [Frontend](#frontend)
-- [API Documentation](#api-documentation)
-- [Authorization System](#authorization-system)
-- [Scalability Strategies](#scalability-strategies)
-- [AWS Production Deployment](#aws-production-deployment)
-- [Docker & Kubernetes](#docker--kubernetes)
-- [Testing](#testing)
-
 ## Quick Start
 
 ```bash
@@ -61,6 +41,26 @@ cd frontend && npm run dev
 
 Open http://localhost:5173 and login with `admin@platform.com` / `password123`
 
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Architecture](#architecture)
+- [Database Schema](#database-schema)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Design Decisions](#design-decisions)
+- [Installation & Setup](#installation--setup)
+- [Frontend](#frontend)
+- [API Documentation](#api-documentation)
+- [Authorization System](#authorization-system)
+- [Scalability Strategies](#scalability-strategies)
+- [AWS Production Deployment](#aws-production-deployment)
+- [Docker & Kubernetes](#docker--kubernetes)
+- [Testing](#testing)
+
 ## Documentation
 
 - **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** - Complete developer guide covering:
@@ -71,8 +71,6 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
   - Database management
   - API development
   - Troubleshooting
-
-- **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** - Complete development guide (includes quick reference)
 
 ## Overview
 
