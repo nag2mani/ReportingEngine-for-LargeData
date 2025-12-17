@@ -76,9 +76,7 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
 
 - **[BACKEND_CONTROL.md](BACKEND_CONTROL.md)** - Backend control commands
 
-- **[FRONTEND_CONTROL.md](FRONTEND_CONTROL.md)** - Frontend control commands
-
-- **[frontend/README.md](frontend/README.md)** - Frontend-specific documentation
+- **[Frontend](frontend/README.md)** - Frontend-specific documentation
 
 ## Overview
 
