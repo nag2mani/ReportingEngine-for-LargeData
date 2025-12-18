@@ -1,3 +1,4 @@
+// Layout Component - provides consistent page structure with header, navigation, user info, and responsive mobile menu
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';

@@ -1,3 +1,4 @@
+# ConfigMap - stores non-sensitive application configuration (DB host, Redis, API settings, throttling)
 apiVersion: v1
 kind: ConfigMap
 metadata:

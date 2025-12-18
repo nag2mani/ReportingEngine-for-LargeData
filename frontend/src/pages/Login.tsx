@@ -1,3 +1,4 @@
+// Login Page - authentication form with email/password input, handles login flow and displays demo credentials
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';

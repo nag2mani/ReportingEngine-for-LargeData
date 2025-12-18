@@ -5,6 +5,7 @@ import { Student } from '../../entities/student.entity';
 import { CreateStudentDto, UpdateStudentDto } from './dto/create-student.dto';
 import { PaginationDto, PaginatedResponse } from '../../common/dto/pagination.dto';
 
+// Students service - business logic for student operations with school-based access control
 @Injectable()
 export class StudentsService {
   constructor(

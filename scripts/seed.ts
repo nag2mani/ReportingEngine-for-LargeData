@@ -1,3 +1,4 @@
+// Database Seed Script - populates database with test data (schools, students, fee bills, payments) and role-based permissions
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import {

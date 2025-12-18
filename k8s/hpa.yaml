@@ -1,3 +1,4 @@
+# HorizontalPodAutoscaler - auto-scales pods based on CPU (70%) and memory (80%) utilization, 3-10 replicas
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

@@ -20,6 +20,7 @@ import { Resource, Action } from '../../entities/permission.entity';
 import { CurrentUser } from '../../common/decorators/user.decorator';
 import { FieldMaskInterceptor } from '../../common/interceptors/field-mask.interceptor';
 
+// Payments controller - manages payment processing, status updates, and payment history
 @Controller('payments')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @UseInterceptors(FieldMaskInterceptor)

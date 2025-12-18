@@ -9,6 +9,7 @@ import { Student } from '../../entities/student.entity';
 import { School } from '../../entities/school.entity';
 import { ReportFilterDto, TimeSeriesFilterDto } from './dto/report-filter.dto';
 
+// Reports service - generates financial reports, analytics, and statistics with Redis caching
 @Injectable()
 export class ReportsService {
   constructor(

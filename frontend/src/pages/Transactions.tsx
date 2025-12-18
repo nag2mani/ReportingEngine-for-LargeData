@@ -1,3 +1,4 @@
+// Transactions Page - displays paginated list of all payment transactions with filtering and sorting
 import { Layout } from '../components/Layout';
 import { TransactionsTable } from '../components/TransactionsTable';
 

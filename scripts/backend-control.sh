@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Backend Control Script for Reporting Engine
-# This script automatically detects the project root directory
+# Backend Control Script - manages NestJS backend lifecycle (start/stop/restart/status/logs) with automatic port cleanup
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

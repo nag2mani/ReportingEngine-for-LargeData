@@ -1,3 +1,4 @@
+// Authentication Context - manages user authentication state, login/logout, and token persistence in localStorage
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, LoginRequest } from '../types';
 import { apiService } from '../services/api';

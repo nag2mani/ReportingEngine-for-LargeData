@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../../entities/user.entity';
 
+// JWT strategy for Passport - validates JWT tokens and loads user with roles/permissions
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(

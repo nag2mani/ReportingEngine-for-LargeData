@@ -1,3 +1,4 @@
+// Format Utilities - currency formatting (INR), date/time formatting, and color coding for status/method badges
 import { format, parseISO } from 'date-fns';
 
 export function formatCurrency(amount: number): string {

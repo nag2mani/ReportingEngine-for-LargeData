@@ -8,6 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { PERMISSIONS_KEY } from '../decorators/roles.decorator';
 import { Resource, Action } from '../../entities/permission.entity';
 
+// Permissions guard - enforces role-based access control by checking user permissions for resources and actions
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   constructor(private reflector: Reflector) {}

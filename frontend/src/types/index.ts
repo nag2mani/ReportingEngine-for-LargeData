@@ -1,3 +1,4 @@
+// TypeScript Type Definitions - interfaces for User, Payment, Reports, and API request/response types
 export interface User {
   id: string;
   email: string;

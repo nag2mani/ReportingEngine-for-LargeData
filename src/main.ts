@@ -1,3 +1,4 @@
+// Main application entry point - initializes NestJS app with global configurations
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';

@@ -1,4 +1,4 @@
-// import statements;
+// Root application module - configures all modules, guards, interceptors, and global services
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';

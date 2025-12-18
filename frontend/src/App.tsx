@@ -1,3 +1,4 @@
+// Main App component - sets up routing, authentication context, and toast notifications
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';

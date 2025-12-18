@@ -1,3 +1,4 @@
+// Transactions Table Component - reusable table with pagination, sorting, filtering, search, and permission-based field visibility
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';

@@ -1,3 +1,4 @@
+// Dashboard Page - displays financial metrics, payment breakdowns, and platform stats based on user role (admin vs school user)
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';

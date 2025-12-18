@@ -16,6 +16,7 @@ import { Resource, Action } from '../../entities/permission.entity';
 import { CurrentUser } from '../../common/decorators/user.decorator';
 import { FieldMaskInterceptor } from '../../common/interceptors/field-mask.interceptor';
 
+// Reports controller - provides analytics endpoints for summaries, time-series data, and platform stats
 @Controller('reports')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @UseInterceptors(FieldMaskInterceptor)

@@ -20,6 +20,7 @@ import { Resource, Action } from '../../entities/permission.entity';
 import { CurrentUser } from '../../common/decorators/user.decorator';
 import { FieldMaskInterceptor } from '../../common/interceptors/field-mask.interceptor';
 
+// Fee bills controller - manages fee bill creation, updates, and retrieval with filtering
 @Controller('fee-bills')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @UseInterceptors(FieldMaskInterceptor)

@@ -1,3 +1,4 @@
+# Namespace - Kubernetes namespace for isolating reporting-engine resources
 apiVersion: v1
 kind: Namespace
 metadata:

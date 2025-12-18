@@ -20,6 +20,7 @@ import { Resource, Action } from '../../entities/permission.entity';
 import { CurrentUser } from '../../common/decorators/user.decorator';
 import { FieldMaskInterceptor } from '../../common/interceptors/field-mask.interceptor';
 
+// Students controller - CRUD operations for student management with permission-based access
 @Controller('students')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @UseInterceptors(FieldMaskInterceptor)

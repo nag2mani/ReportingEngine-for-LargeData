@@ -11,6 +11,7 @@ import {
 import { Role } from './role.entity';
 import { School } from './school.entity';
 
+// User entity - represents system users with role-based access and school associations
 @Entity('users')
 @Index(['email'], { unique: true })
 @Index(['school_id'])

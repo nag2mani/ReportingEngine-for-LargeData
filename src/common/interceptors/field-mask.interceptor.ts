@@ -10,6 +10,7 @@ import { Reflector } from '@nestjs/core';
 import { FIELD_PERMISSIONS_KEY } from '../decorators/roles.decorator';
 import { Resource } from '../../entities/permission.entity';
 
+// Field mask interceptor - masks sensitive fields in responses based on user's field-level permissions
 @Injectable()
 export class FieldMaskInterceptor implements NestInterceptor {
   constructor(private reflector: Reflector) {}
