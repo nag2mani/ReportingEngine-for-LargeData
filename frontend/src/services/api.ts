@@ -1,3 +1,4 @@
+// API Service - centralized HTTP client with JWT token injection, automatic token refresh on 401, and API method wrappers
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import type {
   LoginRequest,

@@ -1,3 +1,4 @@
+// Database module - configures TypeORM connection to PostgreSQL with all entity registrations
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';

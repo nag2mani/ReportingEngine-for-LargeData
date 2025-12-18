@@ -7,6 +7,7 @@ import { FeeBill, FeeBillStatus } from '../../entities/fee-bill.entity';
 import { CreatePaymentDto, UpdatePaymentDto } from './dto/create-payment.dto';
 import { PaginationDto, PaginatedResponse } from '../../common/dto/pagination.dto';
 
+// Payments service - processes payments, updates fee bill status, and tracks transaction history
 @Injectable()
 export class PaymentsService {
   constructor(

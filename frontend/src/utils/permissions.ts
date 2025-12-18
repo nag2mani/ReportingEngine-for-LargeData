@@ -1,3 +1,4 @@
+// Permission Utilities - frontend field-level access control mirroring backend permissions (masks sensitive data like email/phone for accountants)
 import { User } from '../types';
 
 /**

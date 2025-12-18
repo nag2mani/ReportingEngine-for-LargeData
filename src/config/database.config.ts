@@ -1,3 +1,4 @@
+// Database configuration - TypeORM DataSource setup for PostgreSQL with entity and migration paths
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import * as path from 'path';

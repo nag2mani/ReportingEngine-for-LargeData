@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Role } from './role.entity';
 
+// Permission entity - defines resource-level permissions (Resource + Action) for role-based access control
 export enum Resource {
   STUDENTS = 'students',
   FEE_BILLS = 'fee_bills',

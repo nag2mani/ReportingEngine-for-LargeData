@@ -20,6 +20,7 @@ export enum FeeBillStatus {
   OVERDUE = 'overdue',
 }
 
+// FeeBill entity - represents fee bills issued to students with status tracking and payment relationships
 @Entity('fee_bills')
 @Index(['school_id', 'due_date'])
 @Index(['student_id'])

@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../../entities/user.entity';
 import { LoginDto, RefreshTokenDto } from './dto/login.dto';
 
+// Authentication service - validates users, generates JWT tokens, and handles token refresh
 @Injectable()
 export class AuthService {
   constructor(

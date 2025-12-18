@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuditLog } from '../../entities/audit-log.entity';
 
+// Audit log interceptor - automatically logs all API requests with user actions, IP addresses, and changes
 @Injectable()
 export class AuditLogInterceptor implements NestInterceptor {
   constructor(

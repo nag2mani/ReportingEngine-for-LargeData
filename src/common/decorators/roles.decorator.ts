@@ -1,3 +1,4 @@
+// Permission decorators - define required permissions for routes (resource-level and field-level access control)
 import { SetMetadata } from '@nestjs/common';
 import { Resource, Action } from '../../entities/permission.entity';
 

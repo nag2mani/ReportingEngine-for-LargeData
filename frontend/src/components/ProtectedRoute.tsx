@@ -1,3 +1,4 @@
+// Protected Route Component - redirects unauthenticated users to login, shows loading state during auth check
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 

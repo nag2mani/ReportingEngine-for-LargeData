@@ -13,6 +13,7 @@ import { School } from './school.entity';
 import { FeeBill } from './fee-bill.entity';
 import { Payment } from './payment.entity';
 
+// Student entity - stores student information with relationships to fee bills and payments
 @Entity('students')
 @Index(['school_id', 'student_number'], { unique: true })
 @Index(['school_id', 'class'])

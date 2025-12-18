@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Frontend Control Script for Reporting Engine
+# Frontend Control Script - manages Vite frontend process (stop/status) and port cleanup
 
 case "$1" in
   stop)

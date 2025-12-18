@@ -1,3 +1,4 @@
+// Health check controller - provides application health status endpoint for monitoring
 import { Controller, Get } from '@nestjs/common';
 import { Public } from '../../common/decorators/public.decorator';
 

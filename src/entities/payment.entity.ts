@@ -29,6 +29,7 @@ export enum PaymentStatus {
   REVERSED = 'reversed',
 }
 
+// Payment entity - tracks payment transactions with multiple payment methods, status history, and fee bill linkage
 @Entity('payments')
 @Index(['school_id', 'completed_at'])
 @Index(['provider_txn_id'], { unique: true, where: '"provider_txn_id" IS NOT NULL' })

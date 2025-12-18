@@ -1,3 +1,4 @@
+// List Users Script - displays all users grouped by school with credentials for testing
 import { DataSource, Not, IsNull } from 'typeorm';
 import { User, School, Role } from '../src/entities';
 import databaseConfig from '../src/config/database.config';

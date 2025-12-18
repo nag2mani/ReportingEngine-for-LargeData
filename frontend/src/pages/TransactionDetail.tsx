@@ -1,3 +1,4 @@
+// Transaction Detail Page - shows comprehensive payment details with permission-based field masking and transaction status history
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';

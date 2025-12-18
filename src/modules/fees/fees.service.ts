@@ -5,6 +5,7 @@ import { FeeBill } from '../../entities/fee-bill.entity';
 import { CreateFeeBillDto, UpdateFeeBillDto } from './dto/create-fee-bill.dto';
 import { PaginationDto, PaginatedResponse } from '../../common/dto/pagination.dto';
 
+// Fees service - handles fee bill operations with pagination and school-based filtering
 @Injectable()
 export class FeesService {
   constructor(
