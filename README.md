@@ -2,20 +2,6 @@
 
 A scalable, production-ready reporting engine for fee management systems designed to handle millions of records with complex joins, multi-tenant isolation, and fine-grained authorization.
 
-### Key Capabilities Explained
-
-* **Handles millions of records :-**
-  Reporting engine is optimized to work efficiently with very large datasets (millions of rows) without performance degradation, ensuring fast query execution even as data grows over time.
-
-* **Supports complex joins :-**
-  It can generate reports by combining data from multiple related tables (such as students, fees, payments, classes, and academic years) using advanced SQL joins, filters, and aggregations.
-
-* **Multi-tenant isolation :-**
-  A single deployment can serve multiple organizations (tenants), while strictly isolating each tenant’s data so that users can access only their own organization’s records.
-
-* **Fine-grained authorization :-**
-  Access control is implemented at a detailed level, allowing permissions to be defined per role, feature, or data scope (e.g., view-only access, department-level data access, or restricted financial visibility).
-
 ### Platform Admin Dashboard
 <img width="1359" height="619" alt="Screenshot 2025-12-17 at 10 38 11 PM" src="https://github.com/user-attachments/assets/0faff57e-5ef3-43cb-a37d-5afbfd2c9d03" />
 
