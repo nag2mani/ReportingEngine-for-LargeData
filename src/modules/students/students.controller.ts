@@ -69,3 +69,4 @@ export class StudentsController {
     return this.studentsService.remove(id, user.school_id);
   }
 }
+//lsdkf
