@@ -65,36 +65,10 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
 
 ## Documentation
 
-- **[Developer Guide](DEVELOPER_GUIDE.md)** - Complete developer guide covering:
-  - Running & stopping services
-  - Adding more data
-  - Modifying existing services
-  - Adding new services (backend & frontend)
-  - Database management
-  - API development
-  - Troubleshooting
-  - Deployment guides
-
-- **[Design Decisions](DESIGN_DECISION.md)** - Architectural choices and design rationale:
-  - Technology stack decisions (PostgreSQL, NestJS)
-  - Authorization strategy
-  - Caching strategy
-  - Data sync strategy (OLTP → OLAP)
-  - Scalability strategies
-
-- **[API Documentation](API_DOCUMENTATION.md)** - Complete API reference:
-  - Authentication endpoints
-  - Report endpoints
-  - CRUD operations for students, fee bills, and payments
-  - Request/response formats
-  - Pagination and filtering
-
-- **[Database Schema](DATABASE_SCHEMA.md)** - Complete database documentation:
-  - Core tables (schools, students, fee_bills, payments)
-  - Authorization tables (users, roles, permissions)
-  - Entity relationships
-  - Indexing strategy
-  - Multi-tenancy implementation
+- **[Developer Guide](DEVELOPER_GUIDE.md)** - Running & stopping services, adding data, modifying/adding services, database management, API development, troubleshooting, deployment guides
+- **[Design Decisions](DESIGN_DECISION.md)** - Technology stack decisions, authorization strategy, caching strategy, data sync strategy (OLTP → OLAP), scalability strategies
+- **[API Documentation](API_DOCUMENTATION.md)** - Authentication endpoints, report endpoints, CRUD operations, request/response formats, pagination and filtering
+- **[Database Schema](DATABASE_SCHEMA.md)** - Core tables, authorization tables, entity relationships, indexing strategy, multi-tenancy implementation
 
 
 ## Project Structure
