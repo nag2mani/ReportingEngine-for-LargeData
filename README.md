@@ -1,4 +1,4 @@
-# Reporting Engine for Large Data (Env:Dev)
+# Reporting Engine for Large Data
 
 A scalable, production-ready reporting engine for fee management systems designed to handle millions of records with complex joins, multi-tenant isolation, and fine-grained authorization.
 
