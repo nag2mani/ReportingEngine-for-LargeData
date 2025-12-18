@@ -19,12 +19,9 @@ A scalable, production-ready reporting engine for fee management systems designe
 - [Database Schema](#database-schema)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
-- [Design Decisions](DESIGN_DECISION.md)
-- [API Documentation](API_DOCUMENTATION.md)
 - [Authorization System](#authorization-system)
-- [Scalability Strategies](DESIGN_DECISION.md#scalability-strategies)
-- [AWS Production Deployment](DEVELOPER_GUIDE.md#aws-production-deployment)
-- [Docker & Kubernetes](DEVELOPER_GUIDE.md#docker--kubernetes)
+- [Assumptions & Performance Targets](#assumptions--performance-targets)
+- [Future Enhancements](#future-enhancements)
 
 
 ## Overview
@@ -68,7 +65,7 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
 
 ## Documentation
 
-- **[Documentation](DEVELOPER_GUIDE.md)** - Complete developer guide covering:
+- **[Developer Guide](DEVELOPER_GUIDE.md)** - Complete developer guide covering:
   - Running & stopping services
   - Adding more data
   - Modifying existing services
@@ -76,6 +73,28 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
   - Database management
   - API development
   - Troubleshooting
+  - Deployment guides
+
+- **[Design Decisions](DESIGN_DECISION.md)** - Architectural choices and design rationale:
+  - Technology stack decisions (PostgreSQL, NestJS)
+  - Authorization strategy
+  - Caching strategy
+  - Data sync strategy (OLTP → OLAP)
+  - Scalability strategies
+
+- **[API Documentation](API_DOCUMENTATION.md)** - Complete API reference:
+  - Authentication endpoints
+  - Report endpoints
+  - CRUD operations for students, fee bills, and payments
+  - Request/response formats
+  - Pagination and filtering
+
+- **[Database Schema](DATABASE_SCHEMA.md)** - Complete database documentation:
+  - Core tables (schools, students, fee_bills, payments)
+  - Authorization tables (users, roles, permissions)
+  - Entity relationships
+  - Indexing strategy
+  - Multi-tenancy implementation
 
 
 ## Project Structure
