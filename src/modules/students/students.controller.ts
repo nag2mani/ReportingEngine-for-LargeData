@@ -69,4 +69,3 @@ export class StudentsController {
     return this.studentsService.remove(id, user.school_id);
   }
 }
-// This is dev and wanted to merge into prod using PR
