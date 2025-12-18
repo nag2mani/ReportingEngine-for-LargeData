@@ -16,7 +16,6 @@ A scalable, production-ready reporting engine for fee management systems designe
 - [Documentation](#documentation)
 - [Project Structure](#project-structure)
 - [Architecture](#architecture)
-- [Database Schema](#database-schema)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Authorization System](#authorization-system)
@@ -192,17 +191,6 @@ ReportingEngine-for-LargeData/
 3. **Cache Layer (Redis)**: Caching for dashboard summaries and frequently accessed data
 4. **Streaming (Kafka)**: Optional - for handling burst traffic and CDC
 5. **OLAP Database (ClickHouse/Redshift)**: For heavy analytical queries (future enhancement)
-
-## Database Schema
-
-For detailed database schema documentation, see **[DATABASE_SCHEMA.md](DATABASE_SCHEMA.md)**.
-
-The database schema includes:
-
-- **Core Tables**: `schools`, `students`, `fee_bills`, `payments`, `transaction_status`
-- **Authorization Tables**: `users`, `roles`, `permissions`, `field_permissions`, `audit_logs`
-- **Indexing Strategy**: Composite and single-column indexes for optimal query performance
-- **Multi-Tenancy**: Row-level isolation using `school_id` for secure data separation
 
 ## Features
 
