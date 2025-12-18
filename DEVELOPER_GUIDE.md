@@ -13,7 +13,8 @@ Complete guide for developing, running, and extending the Reporting Engine appli
 7. [Database Management](#database-management)
 8. [API Development](#api-development)
 9. [Frontend Development](#frontend-development)
-10. [Troubleshooting](#troubleshooting)
+10. [Testing & Troubleshooting](#testing--troubleshooting)
+11. [AWS Production Deployment](#aws-production-deployment)
 
 ---
 
@@ -1126,7 +1127,32 @@ This command will display:
 - **Backend API**: http://localhost:3000/api/v1
 - **Health Check**: http://localhost:3000/api/v1/health
 
-## Troubleshooting
+## Testing & Troubleshooting
+
+### Postman Collection
+
+Import `postman_collection.json` into Postman:
+
+1. **Import Collection**: File → Import → Select `postman_collection.json`
+2. **Set Variables**: Update `base_url` if needed
+3. **Login**: Run "Authentication → Login" to get tokens
+4. **Test APIs**: All endpoints are ready to use
+
+### Manual Testing
+
+```bash
+# Health check
+curl http://localhost:3000/api/v1/health
+
+# Login
+curl -X POST http://localhost:3000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@platform.com","password":"password123"}'
+
+# Get summary (replace TOKEN)
+curl http://localhost:3000/api/v1/reports/summary \
+  -H "Authorization: Bearer <TOKEN>"
+```
 
 ### 🐛 Quick Troubleshooting Commands
 
@@ -1354,4 +1380,140 @@ cd frontend && npm run dev
 ./scripts/backend-control.sh stop && \
 docker-compose stop postgres redis && \
 pkill -f "vite"
+```
+
+## AWS Production Deployment
+
+### Recommended Services
+
+1. **Compute**: Amazon EKS (Kubernetes)
+   - Managed Kubernetes cluster
+   - Auto-scaling node groups
+   - Spot instances for cost optimization
+
+2. **Database**: Amazon Aurora PostgreSQL
+   - Multi-AZ for high availability
+   - Read replicas for reporting
+   - Automated backups
+   - Encryption at rest
+
+3. **Cache**: Amazon ElastiCache (Redis)
+   - Cluster mode for high availability
+   - Automatic failover
+   - Encryption in transit
+
+4. **Streaming**: Amazon MSK (Kafka) or Kinesis Data Streams
+   - MSK for Kafka compatibility
+   - Kinesis for serverless option
+
+5. **OLAP**: Amazon Redshift or ClickHouse on EC2
+   - Redshift for managed analytics
+   - ClickHouse for cost-effective self-hosted option
+
+6. **Load Balancer**: Application Load Balancer (ALB)
+   - HTTPS termination
+   - SSL certificate from ACM
+   - Health checks
+
+7. **Storage**: Amazon S3
+   - Backup storage
+   - ETL snapshots
+   - Log archives
+
+8. **Secrets**: AWS Secrets Manager
+   - Database credentials
+   - JWT secrets
+   - API keys
+
+### Configuration Steps
+
+1. **Create EKS Cluster**
+   ```bash
+   eksctl create cluster --name reporting-engine --region us-east-1 --node-type t3.medium --nodes 3
+   ```
+
+2. **Set up Aurora PostgreSQL**
+   - Create cluster with 2+ instances (multi-AZ)
+   - Enable encryption at rest
+   - Configure VPC security groups
+   - Create read replica for analytics
+
+3. **Set up ElastiCache Redis**
+   - Create cluster mode enabled
+   - Configure in same VPC as EKS
+   - Enable encryption in transit
+
+4. **Build and Push Docker Image**
+   ```bash
+   aws ecr create-repository --repository-name reporting-engine
+   docker build -t reporting-engine .
+   docker tag reporting-engine:latest <account>.dkr.ecr.us-east-1.amazonaws.com/reporting-engine:latest
+   docker push <account>.dkr.ecr.us-east-1.amazonaws.com/reporting-engine:latest
+   ```
+
+5. **Deploy to Kubernetes**
+   ```bash
+   # Update k8s/configmap.yaml and k8s/secret.yaml with actual values
+   kubectl apply -f k8s/namespace.yaml
+   kubectl apply -f k8s/configmap.yaml
+   kubectl create secret generic reporting-engine-secrets --from-literal=DB_PASSWORD=xxx --from-literal=JWT_SECRET=xxx -n reporting-engine
+   kubectl apply -f k8s/deployment.yaml
+   kubectl apply -f k8s/service.yaml
+   kubectl apply -f k8s/hpa.yaml
+   kubectl apply -f k8s/ingress.yaml
+   ```
+
+6. **Configure ALB Ingress Controller**
+   ```bash
+   kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.7/docs/install/v2_4_7_full.yaml
+   ```
+
+### Production Checklist
+
+- [ ] Enable database encryption at rest
+- [ ] Configure VPC security groups (restrict DB access)
+- [ ] Set up CloudWatch logging
+- [ ] Configure auto-scaling (HPA)
+- [ ] Set up monitoring (Prometheus + Grafana)
+- [ ] Configure backup strategy (daily snapshots)
+- [ ] Set up alerting (CloudWatch alarms)
+- [ ] Enable WAF on ALB
+- [ ] Configure SSL/TLS certificates
+- [ ] Set up CI/CD pipeline
+- [ ] Configure secrets rotation
+
+
+## Docker & Kubernetes
+
+### Docker Compose (Local Development)
+
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f app
+
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes
+docker-compose down -v
+```
+
+### Kubernetes Deployment
+
+All manifests are in the `k8s/` directory:
+
+- `namespace.yaml`: Kubernetes namespace
+- `configmap.yaml`: Application configuration
+- `secret.yaml`: Sensitive data (update with actual values)
+- `deployment.yaml`: Application deployment (3 replicas)
+- `service.yaml`: ClusterIP service
+- `hpa.yaml`: Horizontal Pod Autoscaler (3-10 replicas)
+- `ingress.yaml`: ALB Ingress for external access
+
+**Deploy:**
+```bash
+kubectl apply -f k8s/
 ```
