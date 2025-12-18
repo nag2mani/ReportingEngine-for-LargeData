@@ -330,6 +330,10 @@ npm run seed -- \
 
 #### Using API
 
+For complete API endpoint documentation, see [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
+
+Quick examples:
+
 ```bash
 # Create a student
 curl -X POST http://localhost:3000/api/v1/students \
@@ -926,7 +930,17 @@ docker-compose exec -T postgres psql -U postgres reporting_engine < backup.sql
 
 ## API Development
 
-### Testing APIs
+For complete API documentation including all endpoints, request/response formats, authentication, and examples, see **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)**.
+
+### Quick Testing
+
+#### Using Postman (Recommended)
+
+1. Open Postman
+2. Import → File → Select `postman_collection.json`
+3. Run "Authentication → Login" to get token
+4. Token is automatically saved to collection variable
+5. Test all endpoints!
 
 #### Using curl
 
@@ -936,55 +950,12 @@ curl -X POST http://localhost:3000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@platform.com","password":"password123"}'
 
-# Get summary (replace TOKEN)
+# Get summary (replace TOKEN with access_token from login)
 curl http://localhost:3000/api/v1/reports/summary \
   -H "Authorization: Bearer YOUR_TOKEN"
-
-# Create payment
-curl -X POST http://localhost:3000/api/v1/payments \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "school_id": "UUID",
-    "student_id": "UUID",
-    "amount_paid": 10000,
-    "method": "upi"
-  }'
 ```
 
-#### Using Postman
-
-1. Open Postman
-2. Import → File → Select `postman_collection.json`
-3. Run "Authentication → Login" to get token
-4. Token is automatically saved to collection variable
-5. Test all endpoints!
-
-### API Response Format
-
-```typescript
-// Success response
-{
-  "data": { ... },
-  "message": "Success" // optional
-}
-
-// Error response
-{
-  "statusCode": 400,
-  "message": "Error message",
-  "error": "Bad Request"
-}
-
-// Paginated response
-{
-  "data": [...],
-  "total": 100,
-  "page": 1,
-  "limit": 20,
-  "totalPages": 5
-}
-```
+For more API examples and complete endpoint documentation, refer to [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
 
 ---
 
@@ -1140,18 +1111,11 @@ Import `postman_collection.json` into Postman:
 
 ### Manual Testing
 
+For complete API testing examples and endpoint documentation, see [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
+
+Quick health check:
 ```bash
-# Health check
 curl http://localhost:3000/api/v1/health
-
-# Login
-curl -X POST http://localhost:3000/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@platform.com","password":"password123"}'
-
-# Get summary (replace TOKEN)
-curl http://localhost:3000/api/v1/reports/summary \
-  -H "Authorization: Bearer <TOKEN>"
 ```
 
 ### 🐛 Quick Troubleshooting Commands

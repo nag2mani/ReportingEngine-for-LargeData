@@ -44,6 +44,8 @@ This document outlines the key design decisions and architectural choices made i
 **Multi-Tenancy**:
 - Automatic scoping via `@CurrentUser()` decorator
 - All queries filtered by `user.school_id` (except platform admins)
+- Row-level isolation at database level using `school_id` column
+- See [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md#multi-tenancy) for database implementation details
 
 ## Caching Strategy
 
@@ -71,9 +73,8 @@ This document outlines the key design decisions and architectural choices made i
 ### Database Optimization
 
 1. **Indexing**
-   - Composite indexes on `(school_id, student_number)`, `(school_id, due_date)`
-   - Partial indexes on status columns
-   - Unique indexes on `provider_txn_id`
+   - Strategic composite and single-column indexes for common query patterns
+   - See [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md#indexing-strategy) for detailed indexing strategy
 
 2. **Partitioning** (Future)
    - Partition `payments` by `school_id` or monthly ranges
