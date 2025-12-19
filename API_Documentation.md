@@ -1,6 +1,8 @@
 # API Documentation
 
-Complete API reference for the Reporting Engine application.
+Complete API reference for the Reporting Engine application. For a complete list of all endpoints with examples, **import the postman_collection.json file into Postman.**
+
+<img width="1465" height="841" alt="Screenshot 2025-12-19 at 9 12 21 AM" src="https://github.com/user-attachments/assets/77744e5a-66df-4508-8b22-fc6f76d03479" />
 
 ## Table of Contents
 
