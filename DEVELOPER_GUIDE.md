@@ -930,7 +930,7 @@ docker-compose exec -T postgres psql -U postgres reporting_engine < backup.sql
 
 ## API Development
 
-For complete API documentation including all endpoints, request/response formats, authentication, and examples, see **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)**.
+For complete API documentation including all endpoints, request/response formats, authentication, and examples, check **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)**.
 
 ### Quick Testing
 
