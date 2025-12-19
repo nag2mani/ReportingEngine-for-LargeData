@@ -65,8 +65,8 @@ Open http://localhost:5173 and login with `admin@platform.com` / `password123`
 ## Documentation
 
 - **[Developer Guide](DEVELOPER_GUIDE.md)** - Running & stopping services, adding data, modifying/adding services, database management, API development, troubleshooting, deployment guides
-- **[Design Decisions](DESIGN_DECISION.md)** - Technology stack decisions, authorization strategy, caching strategy, data sync strategy (OLTP → OLAP), scalability strategies
-- **[API Documentation](API_DOCUMENTATION.md)** - Authentication endpoints, report endpoints, CRUD operations, request/response formats, pagination and filtering
+- **[Design Document](DESIGN_DOCUMENT.md)** - Technology stack decisions, authorization strategy, caching strategy, data sync strategy (OLTP → OLAP), scalability strategies
+- **[API Documentation](API_DOCUMENT.md)** - Authentication endpoints, report endpoints, CRUD operations, request/response formats, pagination and filtering
 - **[Database Schema](DATABASE_SCHEMA.md)** - Core tables, authorization tables, entity relationships, indexing strategy, multi-tenancy implementation
 
 
