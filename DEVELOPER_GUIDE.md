@@ -15,6 +15,7 @@ Complete guide for developing, running, and extending the Reporting Engine appli
 9. [Frontend Development](#frontend-development)
 10. [Testing & Troubleshooting](#testing--troubleshooting)
 11. [AWS Production Deployment](#aws-production-deployment)
+12. [Google Cloud Platform (GCP) Production Deployment](#google-cloud-platform-gcp-production-deployment)
 
 ---
 
@@ -1446,6 +1447,550 @@ pkill -f "vite"
 - [ ] Set up CI/CD pipeline
 - [ ] Configure secrets rotation
 
+---
+
+## Google Cloud Platform (GCP) Production Deployment
+
+### Recommended Services
+
+1. **Compute**: Google Kubernetes Engine (GKE)
+   - Managed Kubernetes cluster
+   - Auto-scaling node pools
+   - Preemptible VMs for cost optimization
+   - Regional clusters for high availability
+
+2. **Database**: Cloud SQL for PostgreSQL
+   - High availability with automatic failover
+   - Read replicas for reporting workloads
+   - Automated backups and point-in-time recovery
+   - Encryption at rest and in transit
+   - Private IP for secure connections
+
+3. **Cache**: Cloud Memorystore for Redis
+   - High availability with automatic failover
+   - Standard tier for production
+   - Encryption in transit
+   - VPC-native networking
+
+4. **Streaming**: Pub/Sub or Cloud Dataflow
+   - Pub/Sub for event streaming
+   - Dataflow for ETL pipelines
+
+5. **OLAP**: BigQuery
+   - Serverless data warehouse
+   - Automatic scaling
+   - Built-in ML capabilities
+   - Cost-effective for analytics
+
+6. **Load Balancer**: Google Cloud Load Balancer
+   - Global HTTPS load balancing
+   - SSL certificate management
+   - Health checks and auto-scaling
+   - CDN integration
+
+7. **Storage**: Cloud Storage
+   - Backup storage
+   - ETL snapshots
+   - Log archives
+   - Lifecycle policies
+
+8. **Secrets**: Secret Manager
+   - Database credentials
+   - JWT secrets
+   - API keys
+   - Automatic rotation support
+
+9. **Container Registry**: Artifact Registry or Container Registry
+   - Private Docker image storage
+   - Vulnerability scanning
+   - IAM-based access control
+
+10. **Monitoring**: Cloud Monitoring & Cloud Logging
+    - Application performance monitoring
+    - Log aggregation and analysis
+    - Alerting and notifications
+
+### Configuration Changes Required
+
+#### 1. Update Kubernetes Deployment Files
+
+**File: `k8s/deployment.yaml`**
+
+Change the image reference from AWS ECR to GCP Artifact Registry:
+
+```yaml
+# Before (AWS):
+image: <ECR_REGISTRY>/reporting-engine:latest
+
+# After (GCP):
+image: <REGION>-docker.pkg.dev/<PROJECT_ID>/<REPOSITORY_NAME>/reporting-engine:latest
+```
+
+**File: `k8s/configmap.yaml`**
+
+Update database and Redis hostnames to GCP service endpoints:
+
+```yaml
+# Before (AWS):
+DB_HOST: "aurora-postgres-cluster.cluster-xxxxx.us-east-1.rds.amazonaws.com"
+REDIS_HOST: "reporting-engine-redis.xxxxx.0001.use1.cache.amazonaws.com"
+
+# After (GCP):
+DB_HOST: "<CLOUD_SQL_PRIVATE_IP>"  # e.g., 10.0.0.3 (Private IP)
+# OR use Cloud SQL Proxy connection name:
+# DB_HOST: "/cloudsql/<PROJECT_ID>:<REGION>:<INSTANCE_NAME>"
+REDIS_HOST: "<MEMORYSTORE_REDIS_IP>"  # e.g., 10.0.0.4 (Private IP)
+```
+
+**File: `k8s/ingress.yaml`**
+
+Replace AWS ALB annotations with GCP Ingress configuration:
+
+```yaml
+# Before (AWS ALB):
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: reporting-engine-ingress
+  namespace: reporting-engine
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:...
+
+# After (GCP):
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: reporting-engine-ingress
+  namespace: reporting-engine
+  annotations:
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.global-static-ip-name: reporting-engine-ip
+    networking.gke.io/managed-certificates: reporting-engine-ssl-cert
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  rules:
+  - host: api.reporting-engine.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: reporting-engine-service
+            port:
+              number: 80
+```
+
+**Create: `k8s/gcp-managed-certificate.yaml`** (New file)
+
+```yaml
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: reporting-engine-ssl-cert
+  namespace: reporting-engine
+spec:
+  domains:
+    - api.reporting-engine.example.com
+```
+
+#### 2. Update Environment Configuration
+
+**File: `.env.example`** (for reference)
+
+Update connection strings for GCP services:
+
+```bash
+# Cloud SQL PostgreSQL
+DB_HOST=<CLOUD_SQL_PRIVATE_IP>
+# OR use Cloud SQL Proxy: /cloudsql/PROJECT_ID:REGION:INSTANCE_NAME
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=<SECURE_PASSWORD>
+DB_DATABASE=reporting_engine
+
+# Memorystore Redis
+REDIS_HOST=<MEMORYSTORE_REDIS_IP>
+REDIS_PORT=6379
+REDIS_PASSWORD=  # Usually empty for Memorystore
+
+# Application
+NODE_ENV=production
+PORT=3000
+API_PREFIX=api/v1
+
+# JWT (store in Secret Manager)
+JWT_SECRET=<GENERATE_SECURE_SECRET>
+JWT_EXPIRES_IN=1h
+JWT_REFRESH_SECRET=<GENERATE_SECURE_SECRET>
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Rate Limiting
+THROTTLE_TTL=60
+THROTTLE_LIMIT=100
+```
+
+#### 3. Update Database Configuration (if using Cloud SQL Proxy)
+
+**File: `src/config/database.config.ts`**
+
+If using Cloud SQL Proxy, you may need to update the connection:
+
+```typescript
+export default new DataSource({
+  type: 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || '5432', 10),
+  username: process.env.DB_USERNAME || 'postgres',
+  password: process.env.DB_PASSWORD || 'postgres',
+  database: process.env.DB_DATABASE || 'reporting_engine',
+  // For Cloud SQL Proxy Unix socket:
+  // extra: {
+  //   socketPath: process.env.DB_HOST, // e.g., /cloudsql/PROJECT:REGION:INSTANCE
+  // },
+  entities: [path.join(__dirname, '../**/*.entity{.ts,.js}')],
+  migrations: [path.join(__dirname, '../migrations/*{.ts,.js}')],
+  synchronize: false, // Always false in production
+  logging: process.env.NODE_ENV === 'development',
+});
+```
+
+#### 4. Create GCP-Specific Kubernetes Secrets
+
+**File: `k8s/secret-gcp.yaml`** (Create new file)
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: reporting-engine-secrets
+  namespace: reporting-engine
+type: Opaque
+stringData:
+  DB_USERNAME: postgres
+  DB_PASSWORD: <YOUR_DB_PASSWORD>
+  JWT_SECRET: <YOUR_JWT_SECRET>
+  JWT_REFRESH_SECRET: <YOUR_REFRESH_SECRET>
+```
+
+**Alternative: Use Secret Manager**
+
+```yaml
+# In deployment.yaml, use Workload Identity to access Secret Manager
+# Add annotation to service account:
+# iam.gke.io/gcp-service-account: reporting-engine-sa@PROJECT_ID.iam.gserviceaccount.com
+```
+
+### Step-by-Step Deployment
+
+#### 1. Prerequisites
+
+```bash
+# Install Google Cloud SDK
+# https://cloud.google.com/sdk/docs/install
+
+# Authenticate
+gcloud auth login
+gcloud auth application-default login
+
+# Set project
+gcloud config set project <PROJECT_ID>
+
+# Enable required APIs
+gcloud services enable \
+  container.googleapis.com \
+  sqladmin.googleapis.com \
+  redis.googleapis.com \
+  secretmanager.googleapis.com \
+  artifactregistry.googleapis.com \
+  compute.googleapis.com
+```
+
+#### 2. Create GKE Cluster
+
+```bash
+# Create cluster with private nodes (recommended for production)
+gcloud container clusters create reporting-engine-cluster \
+  --region=us-central1 \
+  --num-nodes=3 \
+  --machine-type=e2-medium \
+  --enable-autorepair \
+  --enable-autoupgrade \
+  --enable-autoscaling \
+  --min-nodes=3 \
+  --max-nodes=10 \
+  --enable-ip-alias \
+  --network=default \
+  --subnetwork=default \
+  --enable-private-nodes \
+  --master-ipv4-cidr=172.16.0.0/28 \
+  --enable-network-policy
+
+# Get credentials
+gcloud container clusters get-credentials reporting-engine-cluster --region=us-central1
+```
+
+#### 3. Set up Cloud SQL for PostgreSQL
+
+```bash
+# Create Cloud SQL instance
+gcloud sql instances create reporting-engine-db \
+  --database-version=POSTGRES_15 \
+  --tier=db-custom-2-4096 \
+  --region=us-central1 \
+  --network=default \
+  --no-assign-ip \
+  --enable-bin-log \
+  --backup-start-time=03:00 \
+  --enable-point-in-time-recovery
+
+# Create database
+gcloud sql databases create reporting_engine --instance=reporting-engine-db
+
+# Create user
+gcloud sql users create postgres \
+  --instance=reporting-engine-db \
+  --password=<SECURE_PASSWORD>
+
+# Get private IP
+gcloud sql instances describe reporting-engine-db --format="value(ipAddresses[0].ipAddress)"
+```
+
+#### 4. Set up Memorystore for Redis
+
+```bash
+# Create Redis instance
+gcloud redis instances create reporting-engine-redis \
+  --size=1 \
+  --region=us-central1 \
+  --network=default \
+  --redis-version=redis_7_0 \
+  --tier=standard
+
+# Get private IP
+gcloud redis instances describe reporting-engine-redis \
+  --region=us-central1 \
+  --format="value(host)"
+```
+
+#### 5. Configure VPC Peering (if needed)
+
+```bash
+# Cloud SQL private IP requires VPC peering
+# This is automatically set up when using private IP
+
+# For Memorystore, ensure VPC peering is configured
+gcloud services vpc-peerings connect \
+  --service=servicenetworking.googleapis.com \
+  --ranges=10.0.0.0/16 \
+  --network=default
+```
+
+#### 6. Create Artifact Registry Repository
+
+```bash
+# Create repository
+gcloud artifacts repositories create reporting-engine-repo \
+  --repository-format=docker \
+  --location=us-central1 \
+  --description="Reporting Engine Docker images"
+
+# Configure Docker authentication
+gcloud auth configure-docker us-central1-docker.pkg.dev
+```
+
+#### 7. Build and Push Docker Image
+
+```bash
+# Build image
+docker build -t reporting-engine:latest .
+
+# Tag for GCP
+docker tag reporting-engine:latest \
+  us-central1-docker.pkg.dev/<PROJECT_ID>/reporting-engine-repo/reporting-engine:latest
+
+# Push to Artifact Registry
+docker push \
+  us-central1-docker.pkg.dev/<PROJECT_ID>/reporting-engine-repo/reporting-engine:latest
+```
+
+#### 8. Create Secrets in Secret Manager
+
+```bash
+# Store database password
+echo -n "<DB_PASSWORD>" | gcloud secrets create db-password --data-file=-
+
+# Store JWT secret
+echo -n "<JWT_SECRET>" | gcloud secrets create jwt-secret --data-file=-
+
+# Store refresh secret
+echo -n "<JWT_REFRESH_SECRET>" | gcloud secrets create jwt-refresh-secret --data-file=-
+```
+
+#### 9. Update Kubernetes Manifests
+
+Update the following files with actual GCP values:
+
+- `k8s/configmap.yaml`: Update `DB_HOST` and `REDIS_HOST` with private IPs
+- `k8s/deployment.yaml`: Update image path to Artifact Registry
+- `k8s/ingress.yaml`: Replace AWS ALB annotations with GCP Ingress
+- `k8s/secret.yaml`: Update with actual secrets (or use Secret Manager)
+
+#### 10. Deploy to GKE
+
+```bash
+# Create namespace
+kubectl apply -f k8s/namespace.yaml
+
+# Create ConfigMap
+kubectl apply -f k8s/configmap.yaml
+
+# Create Secrets (or use Secret Manager with Workload Identity)
+kubectl apply -f k8s/secret.yaml
+
+# Create Managed Certificate
+kubectl apply -f k8s/gcp-managed-certificate.yaml
+
+# Deploy application
+kubectl apply -f k8s/deployment.yaml
+
+# Create service
+kubectl apply -f k8s/service.yaml
+
+# Create HPA
+kubectl apply -f k8s/hpa.yaml
+
+# Create Ingress
+kubectl apply -f k8s/ingress.yaml
+
+# Wait for certificate provisioning (may take 10-15 minutes)
+kubectl describe managedcertificate reporting-engine-ssl-cert -n reporting-engine
+```
+
+#### 11. Reserve Static IP (Optional)
+
+```bash
+# Reserve global static IP
+gcloud compute addresses create reporting-engine-ip --global
+
+# Get IP address
+gcloud compute addresses describe reporting-engine-ip --global --format="value(address)"
+```
+
+#### 12. Set up Cloud SQL Proxy (Alternative to Private IP)
+
+If you prefer using Cloud SQL Proxy instead of private IP:
+
+```bash
+# Add Cloud SQL Proxy sidecar to deployment
+# Update k8s/deployment.yaml to include:
+# - name: cloud-sql-proxy
+#   image: gcr.io/cloudsql-docker/gce-proxy:1.33.2
+#   command:
+#     - "/cloud_sql_proxy"
+#     - "-instances=<PROJECT_ID>:<REGION>:<INSTANCE_NAME>=tcp:5432"
+```
+
+### Files to Modify for GCP Deployment
+
+| File | Changes Required |
+|------|------------------|
+| `k8s/deployment.yaml` | Update `image` field to Artifact Registry path |
+| `k8s/configmap.yaml` | Update `DB_HOST` and `REDIS_HOST` to GCP service IPs |
+| `k8s/ingress.yaml` | Replace AWS ALB annotations with GCP Ingress annotations |
+| `k8s/secret.yaml` | Update secrets or configure Secret Manager integration |
+| `k8s/gcp-managed-certificate.yaml` | **Create new file** for SSL certificate |
+| `.env.example` | Update connection strings (for reference) |
+| `src/config/database.config.ts` | Optional: Add Cloud SQL Proxy socket path support |
+
+### Production Checklist
+
+- [ ] Enable database encryption at rest (Cloud SQL)
+- [ ] Configure VPC firewall rules (restrict DB access to GKE nodes)
+- [ ] Set up Cloud Logging and Cloud Monitoring
+- [ ] Configure auto-scaling (HPA in Kubernetes)
+- [ ] Set up alerting (Cloud Monitoring alerts)
+- [ ] Configure backup strategy (Cloud SQL automated backups)
+- [ ] Enable SSL/TLS certificates (Managed Certificates)
+- [ ] Set up CI/CD pipeline (Cloud Build)
+- [ ] Configure secrets rotation (Secret Manager)
+- [ ] Enable binary logging for Cloud SQL (for point-in-time recovery)
+- [ ] Set up Cloud Armor for DDoS protection
+- [ ] Configure IAM roles and service accounts
+- [ ] Enable network policies in GKE
+- [ ] Set up Cloud CDN for static assets
+- [ ] Configure Cloud Storage for backups and logs
+- [ ] Set up BigQuery for analytics (if needed)
+- [ ] Enable Cloud SQL Insights for performance monitoring
+- [ ] Configure Cloud SQL read replicas for reporting
+
+### Cost Optimization Tips
+
+1. **Use Preemptible VMs** for non-critical workloads
+   ```bash
+   gcloud container node-pools create preemptible-pool \
+     --cluster=reporting-engine-cluster \
+     --preemptible \
+     --num-nodes=2
+   ```
+
+2. **Right-size Cloud SQL** - Start with smaller tiers and scale up
+3. **Use Committed Use Discounts** for predictable workloads
+4. **Enable Cloud SQL automatic storage increases** to avoid manual scaling
+5. **Use Cloud CDN** to reduce egress costs
+6. **Set up lifecycle policies** for Cloud Storage to move old data to cheaper storage classes
+
+### Troubleshooting
+
+#### Database Connection Issues
+
+```bash
+# Check Cloud SQL instance status
+gcloud sql instances describe reporting-engine-db
+
+# Test connection from GKE pod
+kubectl run -it --rm debug --image=postgres:15 --restart=Never -- \
+  psql -h <CLOUD_SQL_IP> -U postgres -d reporting_engine
+
+# Check VPC peering
+gcloud services vpc-peerings list --network=default
+```
+
+#### Redis Connection Issues
+
+```bash
+# Check Redis instance status
+gcloud redis instances describe reporting-engine-redis --region=us-central1
+
+# Test connection from GKE pod
+kubectl run -it --rm debug --image=redis:7 --restart=Never -- \
+  redis-cli -h <REDIS_IP> ping
+```
+
+#### Ingress/Certificate Issues
+
+```bash
+# Check Ingress status
+kubectl describe ingress reporting-engine-ingress -n reporting-engine
+
+# Check Managed Certificate
+kubectl describe managedcertificate reporting-engine-ssl-cert -n reporting-engine
+
+# Check Load Balancer
+gcloud compute forwarding-rules list
+```
+
+### Additional Resources
+
+- [GKE Documentation](https://cloud.google.com/kubernetes-engine/docs)
+- [Cloud SQL Documentation](https://cloud.google.com/sql/docs/postgres)
+- [Memorystore Documentation](https://cloud.google.com/memorystore/docs/redis)
+- [Artifact Registry Documentation](https://cloud.google.com/artifact-registry/docs)
+- [Secret Manager Documentation](https://cloud.google.com/secret-manager/docs)
+
+---
 
 ## Docker & Kubernetes
 
