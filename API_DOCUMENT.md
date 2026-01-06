@@ -189,6 +189,6 @@ Paginated responses include:
 
 ### Complete API Reference
 
-For a complete list of all endpoints with examples, import the `postman_collection.json` file into Postman.
+Import the `postman_collection.json` file into Postman and you will get all endpoints with examples.
 
 
